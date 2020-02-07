@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <!--<meta name="viewport" content="width=device-width,initial-scale=1.0,-->
+    <!--maximum-scale=1.0,mininum-scale=1.0,user-scalable=0" />-->
+    <!--<meta name="apple-mobile-web-app-capable" content="yes" />-->
+    <!--<meta name="format-detection" content="telephone=no" />-->
+    <title>欢乐球球</title>
+    <script type="text/javascript" src="util/three.js"></script>
+    <script type="text/javascript" src="util/OBJLoader.js"></script>
+    <script type="text/javascript" src="js/addshanhuan.js"></script>
+    <script type="text/javascript" src="js/addListener.js"></script>
+    <script type="text/javascript" src="js/addPhysics.js"></script>
+    <script type="text/javascript" src="js/KeyFeatures.js"></script>
+    <script type="text/javascript" src="js/initMusic.js"></script>
+    <script type="text/javascript" src="js/ConstantsAndVariables.js"></script>
+    <script type="text/javascript" src="js/initScene.js"></script>
+    <link href="css.css" rel="stylesheet" type="text/css" /><!--//导入相关的css样式表-->
+
+
+    <img id="load" class="load" src="texture/loading.gif"alt="loading"
+            onclick="beginView()">
+    <img id="loadfinsh" class="load" src="texture/loadfinsh.png" alt="loadFish!" style="display: none"
+            onclick="beginView()">
+    <div id="WebGL-output"></div>
+    <div id="Welcome" style="display: none" draggable="false">
+        <img src="texture/blackbackground.png" id="blackbackground" draggable="false"
+             style="width: 150%; height: 103%;margin:auto"/>
+        <img src="texture/title.png" id="title" draggable="false"
+             style="width: 750px;height: 200px;">
+        <img src="texture/difficulty.png" id="difficulty" draggable="false"
+             onclick="changeDiddiculity()"/>
+        <img src="texture/easy.png" id="easy" draggable="false"
+             onclick="changeDiddiculity()">
+        <img src="texture/ballcolor.png" id="pifu" draggable="false"
+             onclick="pifucloseopen()">
+        <img src="texture/watertail.png" id="bluepifu" draggable="false"
+             onclick="choosePifu(0)">
+        <img src="texture/purplewatertail.png" id="purplepifu" draggable="false"
+             onclick="choosePifu(1)">
+        <img src="texture/yellowwatertail.png" id="yellowpifu" draggable="false"
+             onclick="choosePifu(2)">
+        <img src="texture/greenwatertail.png" id="greenpifu" draggable="false"
+             onclick="choosePifu(3)">
+        <img src="texture/kuang.png" id="kuang" draggable="false"
+             style="display: none;">
+        <img src="texture/shezhi.png" id="shezhi" alt="loading" draggable="false"
+             onclick="changeSet()"/>
+        <img src="texture/sound.png" id="sound" draggable="false"
+             style="display: none;" onclick=" musiccloseopen() "/>
+        <img src="texture/nosound.png" id="nosound" draggable="false"
+             style="display: none;" onclick=" musiccloseopen() "/>
+        <img src="texture/start.png" id="startbutton" onclick='startGame()'
+             aria-disabled="true" draggable="false"/>
+    </div>
+    <div id="defen" type="width:100%"
+         style="display: none">
+        <img id="millionscore" class="fen" src="texture/0.png"
+             style="display: none"/>
+        <img id="thousandscore" class="fen" src="texture/0.png"
+             style="display: none"/>
+        <img id="hundredscore" class="fen" src="texture/0.png"
+             style="display: none"/>
+        <img id="tenscore" class="fen" src="texture/0.png"
+             style="display: none"/>
+        <img id="singlescore" class="fen" src="texture/0.png" />
+    </div>
+    <img src="texture/thisdefen.png" id="Gameover"
+         style="display: none;" draggable="false"/>
+    <img src="texture/blackbackground.png" id="endbackground"
+         style="display: none;" draggable="false"/>
+    <img src="texture/again.png" id="again" draggable="false"
+         style="display: none;" onclick="reset()"/>
+
+</head>
+
+<body style="background-color:#D9DBBC">
+
+
+    <script type="text/javascript">
+
+        function init() {
+            initScene();                                    //初始场景
+            initMusic();                                    //初始化音乐
+            addFanRing(mainarraylist,scene);                //加载扇环obj模型
+            addobstaclesFanring(mainarraylist,scene);       //加载障碍物模型
+            setTimeout(toWelComeView,3000);                 //3秒加载界面完成
+            addListener();                                  //监听事件
+            renderScene();                                  //开始刷帧
+            function renderScene() {
+                if (isgame) {                               //加载界面完成进入游戏界面
+                    initPhysics();                          //模拟物理以及触发事件
+                    cameramove();
+                    updataParticlesPosition();              //更新粒子位置
+                    drawNumpic();                           //绘制分数
+                    if(start){
+                        simulation();                   //旋转操作生效
+                    }
+                }
+                requestAnimationFrame(renderScene);
+                renderer.render(scene, camera);
+            }
+        }
+        window.onload = init();//当网页加载后执行init方法
+    </script>
+</body>
+</html>
